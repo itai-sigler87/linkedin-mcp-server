@@ -15,3 +15,7 @@ starlette
 typing-extensions
 mcp[cli]
 linkedin-scraper
+httpx
+lxml
+rich
+certifi
