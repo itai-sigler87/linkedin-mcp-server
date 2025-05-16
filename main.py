@@ -1,8 +1,7 @@
 """
-LinkedIn MCP Server - Retool-compatible MCP server with /sse support
+LinkedIn MCP Server - Retool-compatible MCP server with internal FastAPI app
 """
 
-from fastapi import FastAPI
 from mcp.server.fastmcp import FastMCP
 from linkedin_mcp_server.config import get_config
 from linkedin_mcp_server.cli import print_claude_config
@@ -19,10 +18,7 @@ def main():
         print_claude_config()
 
     mcp = FastMCP()
-
-    # Create a FastAPI app and let MCP populate it internally
-    app = FastAPI()
-    mcp.run(app=app, transport="sse")
+    mcp.run(transport="sse")  # Don't pass app=
 
 if __name__ == "__main__":
     main()
