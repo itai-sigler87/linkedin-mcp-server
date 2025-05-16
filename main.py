@@ -14,6 +14,13 @@ from linkedin_mcp_server.cli import print_claude_config
 from linkedin_mcp_server.drivers.chrome import initialize_driver
 from linkedin_mcp_server.server import create_mcp_server, shutdown_handler
 
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/healthz")
+def healthz():
+    return {"status": "ok"}
 
 def choose_transport_interactive() -> Literal["stdio", "sse"]:
     """Prompt user for transport mode using inquirer."""
