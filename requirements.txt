@@ -4,3 +4,12 @@ selenium
 python-dotenv
 inquirer
 keyring
+pyperclip
+editor
+readchar
+blessed
+xmod
+runs
+pydantic
+starlette
+typing-extensions
