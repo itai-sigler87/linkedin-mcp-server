@@ -19,11 +19,8 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 \
  && rm -rf /var/lib/apt/lists/*
 
-# Set work directory
-WORKDIR /app
-
-# Copy the project files
-COPY . /app
+WORKDIR /app/src
+COPY src/ .
 
 # Upgrade pip and install build dependencies
 RUN pip install --upgrade pip \
