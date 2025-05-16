@@ -33,3 +33,15 @@ RUN pip install --upgrade pip \
 
 # Set default command to run the MCP server
 CMD ["python", "main.py", "--no-setup"]
+
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 10000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
