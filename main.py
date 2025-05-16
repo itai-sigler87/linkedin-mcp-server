@@ -9,21 +9,18 @@ from linkedin_mcp_server.config import get_config
 from linkedin_mcp_server.cli import print_claude_config
 from linkedin_mcp_server.drivers.chrome import initialize_driver
 
-# Create a FastAPI app
 app = FastAPI()
-
-# Create an MCP server
 mcp = FastMCP()
 
-# Register the MCP message handler as a POST /message endpoint
 @app.post("/message")
 async def message(request: Request):
-    body = await request.json()
-    # Let the MCP server process the tool request
-    response = await mcp.handle_message(body)
-    return JSONResponse(response)
+    try:
+        payload = await request.json()
+        result = await mcp.handle_message(payload)
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
-# Optional: health check for Render
 @app.get("/healthz")
 def healthz():
     return {"status": "ok"}
