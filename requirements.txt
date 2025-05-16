@@ -13,3 +13,4 @@ runs
 pydantic
 starlette
 typing-extensions
+mcp[cli]
