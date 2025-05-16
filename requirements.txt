@@ -3,3 +3,4 @@ uvicorn
 selenium
 python-dotenv
 inquirer
+keyring
