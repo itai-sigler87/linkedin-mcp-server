@@ -4,28 +4,13 @@ LinkedIn MCP Server - A Model Context Protocol server for LinkedIn integration.
 
 import sys
 import logging
-import inquirer  # type: ignore
-from typing import Literal, NoReturn
+from typing import NoReturn
 
 from linkedin_mcp_server.config import get_config
 from linkedin_mcp_server.cli import print_claude_config
 from linkedin_mcp_server.drivers.chrome import initialize_driver
 from linkedin_mcp_server.server import create_mcp_server, shutdown_handler
 
-def choose_transport_interactive() -> Literal["stdio", "sse"]:
-    questions = [
-        inquirer.List(
-            "transport",
-            message="Choose MCP transport mode",
-            choices=[
-                ("stdio (Default CLI mode)", "stdio"),
-                ("sse (Server-Sent Events HTTP mode)", "sse"),
-            ],
-            default="stdio",
-        )
-    ]
-    answers = inquirer.prompt(questions)
-    return answers["transport"]
 
 def main() -> None:
     print("🔗 LinkedIn MCP Server 🔗")
@@ -44,9 +29,8 @@ def main() -> None:
 
     initialize_driver()
 
-    transport = config.server.transport
-    if config.server.setup:
-        transport = choose_transport_interactive()
+    # Force SSE as default for non-interactive production environments
+    transport = config.server.transport or "sse"
 
     if config.server.setup:
         print_claude_config()
@@ -55,10 +39,12 @@ def main() -> None:
     print(f"\n🚀 Running LinkedIn MCP server ({transport.upper()} mode)...")
     mcp.run(transport=transport)
 
+
 def exit_gracefully(exit_code: int = 0) -> NoReturn:
     print("\n👋 Shutting down LinkedIn MCP server...")
     shutdown_handler()
     sys.exit(exit_code)
+
 
 if __name__ == "__main__":
     try:
