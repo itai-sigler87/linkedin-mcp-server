@@ -35,4 +35,4 @@ RUN pip install --upgrade pip && \
 EXPOSE 10000
 
 # Run the app — `main.py` is in the root and imports from src/
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
+CMD ["python", "main.py"]
