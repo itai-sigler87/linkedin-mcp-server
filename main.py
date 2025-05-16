@@ -1,37 +1,34 @@
-"""
-LinkedIn MCP Server - Fully compatible with Retool via FastAPI
-"""
-
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from mcp.server.fastmcp import FastMCP
 from linkedin_mcp_server.config import get_config
 from linkedin_mcp_server.cli import print_claude_config
 from linkedin_mcp_server.drivers.chrome import initialize_driver
 
 app = FastAPI()
-mcp = FastMCP()
 
 @app.post("/message")
 async def message(request: Request):
-    try:
-        payload = await request.json()
-        result = await mcp.handle_message(payload)
-        return JSONResponse(content=result)
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
+    body = await request.json()
+    
+    query = body.get("tool_input", {}).get("query", "")
+    session = body.get("session_id", "unknown")
+    tool_name = body.get("tool_name", "linkedinFetcher")
+
+    # Simulate a basic working response
+    return JSONResponse({
+        "text": f"(Simulated) Here's what {tool_name} found for: {query}",
+        "tool_calls": [],
+    })
 
 @app.get("/healthz")
 def healthz():
     return {"status": "ok"}
 
 def main():
-    print("🔗 LinkedIn MCP Server 🔗")
-    print("=" * 40)
-
+    print("🔗 LinkedIn MCP Server - Retool Compatible")
     config = get_config()
     initialize_driver()
-
+    
     if config.server.setup:
         print_claude_config()
 
